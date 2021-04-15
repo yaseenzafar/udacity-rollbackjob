@@ -1,4 +1,13 @@
-commands:
+version: 2.1
+jobs:
+  create_infrastructure:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run: aws cloudformation deploy --stack-name create-infrastructure --template-file template.yml  --region=us-west-2
+      
+jobs:
   destroy_environment:
     steps:
       - run:
