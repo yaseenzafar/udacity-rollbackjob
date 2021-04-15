@@ -5,9 +5,8 @@ commands:
     steps:
       - run:
           name: Destroy environment
-          command: |
-            aws cloudformation delete-stack --stack-name create-infrastructure --region=us-west-2
-
+          command: aws cloudformation delete-stack --stack-name create-infrastructure --capabilities CAPABILITY_IAM --region=us-west-2
+          when: on_fail
 jobs:
   create_infrastructure:
     docker:
@@ -18,9 +17,6 @@ jobs:
           name: Create Stack
           command: |
             aws cloudformation deploy --stack-name create-infrastructure --template-file template.yml  --region=us-west-2
-      - run: return 1
-          when: on_fail
-
 workflows:
   my_workflow:
     jobs:
