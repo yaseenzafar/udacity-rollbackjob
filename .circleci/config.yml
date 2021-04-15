@@ -13,7 +13,7 @@ jobs:
       - destroy_environment
         when:on_fail
       
-jobs:
+commands:
   destroy_environment:
     steps:
       - run:
