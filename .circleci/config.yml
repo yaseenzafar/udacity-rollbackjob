@@ -6,6 +6,12 @@ jobs:
     steps:
       - checkout
       - run: aws cloudformation deploy --stack-name create-infrastructure --template-file template.yml  --region=us-west-2
+      - run:
+          name: simulate error
+          command: |
+            return 1
+      - destroy_environment
+        when: on_fail
       
 jobs:
   destroy_environment:
@@ -14,17 +20,9 @@ jobs:
           name: Destroy environment
           command: |
             aws cloudformation delete-stack --stack-name create-infrastructure
-
-jobs:
-  smoke_test:
-    docker:
-      - image: amazon/aws-cli
-    steps:
-      - checkout
-      - run:
-          name: simulate error
-          command: |
-            return 1
-      - destroy_environment
-        when: on_fail
+        
+workflows:
+  my_workflow:
+    jobs:
+      - create_infrastructure
 
