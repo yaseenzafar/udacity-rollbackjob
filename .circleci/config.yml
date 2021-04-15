@@ -5,7 +5,7 @@ commands:
     steps:
       - run:
           name: Destroy environment
-          command: aws cloudformation delete-stack --stack-name prod-${CIRCLE_WORKFLOW_ID} --capabilities CAPABILITY_IAM --region=us-west-2
+          command: aws cloudformation delete-stack --stack-name create-infrastructure --capabilities CAPABILITY_IAM --region=us-west-2
           when: on_fail
 jobs:
   create_infrastructure:
@@ -16,11 +16,7 @@ jobs:
       - run:
           name: Create Stack
           command: |
-            aws cloudformation deploy \
-              --template-file template.yml \
-              --stack-name prod-${CIRCLE_WORKFLOW_ID}
-              --capabilities CAPABILITY_IAM
-              --region=us-west-2
+            aws cloudformation deploy --stack-name create-infrastructure --template-file template.yml  --region=us-west-2
 
 workflows:
   my_workflow:
