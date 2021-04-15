@@ -1,0 +1,22 @@
+commands:
+  destroy_environment:
+    steps:
+      - run:
+          name: Destroy environment
+          command: |
+            aws cloudformation delete-stack --stack-name create-infrastructure
+
+jobs:
+  smoke_test:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: simulate error
+          command: |
+            return 1
+ 
+      - destroy_environment
+        when: on_fail
+
