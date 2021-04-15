@@ -17,7 +17,7 @@ jobs:
       - run: aws cloudformation deploy --stack-name create-infrastructure --template-file template.yml  --region=us-west-2
       - run: return 1
       - destroy_environment
-        when: on_fail
+        when:on_fail
         
 workflows:
   my_workflow:
