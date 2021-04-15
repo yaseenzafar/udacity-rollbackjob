@@ -1,17 +1,4 @@
 version: 2.1
-jobs:
-  create_infrastructure:
-    docker:
-      - image: amazon/aws-cli
-    steps:
-      - checkout
-      - run: aws cloudformation deploy --stack-name create-infrastructure --template-file template.yml  --region=us-west-2
-      - run:
-          name: simulate error
-          command: |
-            return 1
-      - destroy_environment
-        when:on_fail
       
 commands:
   destroy_environment:
@@ -20,6 +7,17 @@ commands:
           name: Destroy environment
           command: |
             aws cloudformation delete-stack --stack-name create-infrastructure
+            
+jobs:
+  create_infrastructure:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run: aws cloudformation deploy --stack-name create-infrastructure --template-file template.yml  --region=us-west-2
+      - run: return 1
+      - destroy_environment
+        when: on_fail
         
 workflows:
   my_workflow:
